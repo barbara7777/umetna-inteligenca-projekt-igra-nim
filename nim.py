@@ -1,6 +1,20 @@
 import random
 
 
+def play_in_console():
+    input1 = input("Vpisi seznam stevil, ki predstavljajo zacetno st. predmetov v kupcku. (npr: 4 5 6):  ")
+    game = list(map(lambda x: int(x.strip()), input1.strip().split(" ")))
+    print("Zacetno stanje: ", game, "Zacne igralec 0.")
+    print("na vsakem koraku vpisi potezo v obliki para stevil. npr: 3 4 pomeni, da iz tretjega kupcka odstranis 4 predmete.")
+    nim = Nim(game)
+    while not nim.check_for_winner():
+        poteza = input(f"Igralec {nim.player}: vpisi potezo: ")
+        x, y = list(map(lambda x: int(x.strip()), poteza.strip().split(" ")))
+        nim.make_move((x - 1, y))
+        print(nim.piles)
+    print(f"Zmagal je igralec {nim.player}!")
+
+
 def generate_piles(n, m):
     "Generates random number of piles (between 1 and n) each with random number of coins (between 1 and m)"
     game = []
@@ -11,7 +25,7 @@ def generate_piles(n, m):
     return game
 
 
-class Nim():
+class Nim:
 
     def __init__(self, initial):
         """
@@ -41,7 +55,6 @@ class Nim():
         """Checks for winner - returns True if winner found, else it returns False
         First player makes a move, then we switch player, then we check for winner
         If there are no piles left that means other player took the last one and the player that is on the move won"""
-
         counter = 0
         for pile in self.piles:
             if pile == 0:
@@ -55,6 +68,12 @@ class Nim():
         """Makes move and switches player"""
         if self.winner == -1:
             (i, j) = action  # take j coins from i-th pile
+            if i < 0 or i >= len(self.piles):
+                print("ILLEGAL MOVE: Wrong pile index.")
+                return
+            if self.piles[i] < j:
+                print(f"ILLEGAL MOVE: pile {i+1} has only {self.piles[i]} objects.")
+                return
             self.piles[i] -= j
             self.switch_player()
             self.check_for_winner()
