@@ -43,7 +43,7 @@ class Nim:
         action (i, j) means take j coins from i-th pile"""
         actions = []
         for i in range(len(self.piles)):
-            for j in range(1, self.piles[i]):  # player has to take at least one coin
+            for j in range(1, self.piles[i] + 1):  # player has to take at least one coin
                 actions.append((i, j))
         return actions
 
@@ -72,7 +72,7 @@ class Nim:
                 print("ILLEGAL MOVE: Wrong pile index.")
                 return
             if self.piles[i] < j:
-                print(f"ILLEGAL MOVE: pile {i+1} has only {self.piles[i]} objects.")
+                print(f"ILLEGAL MOVE: pile {i + 1} has only {self.piles[i]} objects.")
                 return
             self.piles[i] -= j
             self.switch_player()
